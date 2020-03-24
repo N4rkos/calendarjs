@@ -1,0 +1,116 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,700&display=swap");
+
+$lightGray: rgba(114, 114, 114, 0.1);
+$dayBg: #f9fafc;
+$borderLight: 2px solid $lightGray;
+$purple: #6236ff;
+
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  margin: 50px 100px;
+
+  .header {
+    text-align: center;
+
+    h1 {
+      color: $purple;
+    }
+  }
+
+  .calendar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 700px;
+    border: $borderLight;
+    border-radius: 15px;
+    padding: 15px 15px;
+
+    .controls {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      color: $purple;
+      ion-icon {
+        font-size: 30px;
+        transition: 0.5s ease-in-out;
+        border-radius: 50px;
+        &:hover {
+          background: $purple;
+          color: #fff;
+          transform: scale(1.2);
+        }
+      }
+    }
+
+    h4 {
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 24px;
+    }
+
+    .days-label {
+      display: flex;
+      flex-direction: row;
+      text-align: center;
+      height: 50px;
+      border-bottom: $borderLight;
+      width: 100%;
+      color: rgba(114, 114, 114, 0.3);
+
+      .day-label {
+        width: calc(100% / 7);
+        height: 100%;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+    }
+
+    .days-grid {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+
+      .day-card {
+        position: absolute;
+        width: calc(100% / 7 - 5px);
+        margin: 5px 5px;
+        background: #f9fafc;
+        border-radius: 15px;
+        transition: 0.5s ease-in-out;
+        z-index: 30;
+
+        &:hover {
+          background: $purple;
+          cursor: pointer;
+          span {
+            color: #fff !important;
+          }
+        }
+
+        span {
+          position: absolute;
+          top: 5px;
+          left: 10px;
+          font-size: 18px;
+          transition: 0.5s ease-in-out;
+          color: rgba(114, 114, 114, 0.664);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  body {
+    margin: 0 10px;
+  }
+
+  .calendar {
+    width: calc(100% - 30px) !important;
+  }
+}
