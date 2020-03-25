@@ -188,6 +188,18 @@ body {
   .calendar {
     width: calc(100% - 30px) !important;
   }
+
+  .row {
+    flex-direction: column;
+    .panel {
+      top: calc(700px + 45px);
+      left: -10px;
+      
+      &.active {
+        width: calc(100% - 30px) !important;
+      }
+    }
+  }
 }
 
 @keyframes fadeIn {
