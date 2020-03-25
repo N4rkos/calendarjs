@@ -1,2 +1,4 @@
 /.vscode/
+/deploy/
 .DS_Store
+Makefile
