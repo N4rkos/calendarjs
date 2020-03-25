@@ -13,9 +13,26 @@ body {
 
   .header {
     text-align: center;
-
     h1 {
       color: $purple;
+    }
+  }
+
+  .github-btn {
+    background-color: #24292e;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 8px 8px;
+    border-radius: 50px;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    font-size: 14px;
+    z-index: 999;
+    ion-icon {
+      font-size: 25px;
     }
   }
 
@@ -69,7 +86,7 @@ body {
       font-size: 14px;
       text-transform: uppercase;
       outline: none;
-      transition: .5s ease-in-out;
+      transition: 0.5s ease-in-out;
       &:hover {
         transform: translateY(-8px);
         background: $purple;
@@ -194,7 +211,7 @@ body {
     .panel {
       top: calc(700px + 45px);
       left: -10px;
-      
+
       &.active {
         width: calc(100% - 30px) !important;
       }

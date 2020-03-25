@@ -1,3 +1,10 @@
+/**
+ * CalendarJS is a free open source html css js calendar for integration in website or apps.
+ * The project is currently under development.
+ * @author Thomas Gouveia
+ * @version 0.2
+ * @see https://github.com/N4rkos/calendar-js
+ */
 class Calendar {
 
     /**
@@ -132,6 +139,9 @@ class Calendar {
         return this.today.getDate() > date.getDate() && this.today.getMonth() >= date.getMonth() && this.today.getFullYear() >= date.getFullYear()
     }
 
+    /**
+     * Returns an array of all dates in the current month
+     */
     getDaysInMonthUTC() {
         const month = this.currentDate.getMonth()
         const year = this.currentDate.getFullYear()
@@ -291,4 +301,5 @@ class Calendar {
         return count
     }
 }
+
 Calendar.init();
