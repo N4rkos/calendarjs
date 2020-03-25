@@ -1,28 +1,38 @@
 class Calendar {
 
+    /**
+     * Initialize a new calendar
+     */
     static init() {
         const calendar = document.getElementById('calendar')
         const previous = document.getElementById('previous')
         const next = document.getElementById('next')
-        new Calendar(calendar, [previous, next])
+        const panel = document.getElementById('panel')
+        new Calendar(calendar, panel, [previous, next])
     }
 
     /**
      * Construct a calendar
      * @param {HTMLElement} calendar 
      */
-    constructor(calendar, controls) {
+    constructor(calendar, panel, controls) {
+        //Define constants
         this.MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
         this.DAYS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+        //Bind methods
         this.handleControl = this.handleControl.bind(this)
+        this.handleDayClicked = this.handleDayClicked.bind(this)
+        //Attributes
         this.currentDate = new Date()
         this.today = new Date()
         this.calendar = calendar
         this.controls = controls
+        this.panel = panel
+        this.active = null
         this.completeMonth = this.getDaysInMonthUTC()
-        for (let control of this.controls) {
-            control.addEventListener('click', this.handleControl)
-        }
+        //Set the control listener
+        for (let control of this.controls) control.addEventListener('click', this.handleControl)
+        //Build the UI
         this.injectDate()
         this.injectLabels()
         this.buildCalendar()
@@ -58,9 +68,27 @@ class Calendar {
      * @param {number|null} length 
      */
     format(str, length) {
+        if(str === undefined) {
+            str = this.DAYS[this.DAYS.length - 1]
+        }
         return length ? str.substr(0, length) + '.' : str
     }
 
+    /**
+     * Format a date for display in the panel
+     * @param {Date} date 
+     */
+    formatDate(date) {
+        const day = date.getDate()
+        const month = this.MONTHS[date.getMonth()]
+        const dayLabel = this.format(this.DAYS[date.getDay() - 1], 3)
+        return `${dayLabel} ${day} ${month.toLowerCase()}`
+    }
+
+    /**
+     * Handle controls for the calendar
+     * @param {Event} e 
+     */
     handleControl(e) {
         if (e.target.getAttribute('id') === 'previous')
             this.setPreviousMonth()
@@ -68,16 +96,26 @@ class Calendar {
             this.setNextMonth()
     }
 
+    /**
+     * Set the date to the next month
+     */
     setNextMonth() {
         let date = new Date(Date.UTC(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1))
         this.setDate(date)
     }
 
+    /**
+     * Set the date to the previous month
+     */
     setPreviousMonth() {
         let date = new Date(Date.UTC(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1))
         this.setDate(date)
     }
 
+    /**
+     * Set the new date
+     * @param {Date} date 
+     */
     setDate(date) {
         this.currentDate = date
         this.completeMonth = this.getDaysInMonthUTC()
@@ -135,12 +173,80 @@ class Calendar {
         let today = this.isToday(day);
         let dayCard = document.createElement('div')
         dayCard.setAttribute('class', 'day-card')
-        if (today) dayCard.style.backgroundColor = "#6236ff"
+        dayCard.setAttribute('date', day.toUTCString())
+        if (today) dayCard.style.backgroundColor = '#6236ff'
         dayCard.style.height = `calc(100% / ${this.getNumberOfWeeks()} - 5px)`
         dayCard.style.left = `calc(${this.whichDay(day.getDay())} * (100%/7))`
         dayCard.style.top = offsetTop + '%';
         dayCard.innerHTML = `<span style="color:${today ? "#fff" : "rgba(114, 114, 114, 0.664)"}">${day.getDate()}</span>`
+        dayCard.addEventListener('click', this.handleDayClicked)
         return dayCard
+    }
+
+    buildPanel() {
+        //Header
+        let header = document.createElement('div')
+        header.setAttribute('class', 'panel-header')
+        header.innerHTML = `<h1>${this.formatDate(this.currentDate)}</h1>`
+        //Content
+
+        //Button
+        let button = document.createElement('button')
+        button.setAttribute('class', 'panel-add-button')
+        button.innerText = 'Ajouter une tâche'
+
+
+        this.panel.appendChild(header)
+        this.panel.appendChild(button)
+    }
+
+    handleDayClicked(event) {
+        let clicked = event.target
+        if (clicked === this.active)
+            this.clearActive()
+        else
+            this.setActive(clicked)
+    }
+
+    /**
+     * Set active the calendar
+     * @param {HTMLElement} e card which was clicked
+     */
+    setActive(e) {
+        if (this.active != null) this.clearActive()
+        //Store the active day card into active attribute
+        this.currentDate = new Date(Date.parse(e.getAttribute('date')))
+        this.active = e
+        this.calendar.classList.add('active')
+        this.panel.classList.add('active')
+        this.active.classList.add('active')
+        this.clearPanel()
+        this.buildPanel()
+    }
+
+    /**
+     * Remove active from calendar
+     */
+    clearActive() {
+        this.clearPanel()
+        let activeElements = document.querySelectorAll('.active')
+        this.active = null
+        this.currentDate = this.today
+        if (activeElements.length != 0)
+            for (let active of activeElements)
+                active.classList.remove('active')
+    }
+
+    /**
+     * Clear the panel content
+     */
+    clearPanel() {
+        var e = this.panel
+        var child = e.lastElementChild;
+        while (child) {
+            e.removeChild(child);
+            child = e.lastElementChild;
+        }
     }
 
     /**

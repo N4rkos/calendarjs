@@ -19,7 +19,69 @@ body {
     }
   }
 
+  .row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    position: relative;
+    height: 700px;
+  }
+
+  .panel {
+    position: absolute;
+    right: 0;
+    width: 0;
+    opacity: 1;
+    border: none;
+    height: 700px;
+    padding: 15px 15px;
+    border-radius: 15px;
+    margin-left: 10px;
+    transition: 0.5s ease-in-out;
+    border: 2px solid transparent;
+
+    &.active {
+      width: calc(30% - 80px) !important;
+      border: $borderLight;
+      opacity: 1;
+    }
+
+    .panel-header {
+      position: absolute;
+      top: 15px;
+      height: 50px;
+      h1 {
+        color: $purple;
+        transition: 0.5s ease-in-out;
+        animation: fadeIn 1s ease-in-out;
+      }
+    }
+
+    .panel-add-button {
+      position: absolute;
+      bottom: 15px;
+      width: calc(100% - 30px);
+      border: 2px solid $purple;
+      border-radius: 50px;
+      animation: fadeIn 1s ease-in-out;
+      padding: 8px 8px;
+      color: $purple;
+      font-size: 14px;
+      text-transform: uppercase;
+      outline: none;
+      transition: .5s ease-in-out;
+      &:hover {
+        transform: translateY(-8px);
+        background: $purple;
+        color: white;
+        cursor: pointer;
+      }
+    }
+  }
+
   .calendar {
+    background: white;
+    position: absolute;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -27,6 +89,11 @@ body {
     border: $borderLight;
     border-radius: 15px;
     padding: 15px 15px;
+    transition: 0.5s ease-in-out;
+
+    &.active {
+      width: 70%;
+    }
 
     .controls {
       display: flex;
@@ -40,6 +107,7 @@ body {
         border-radius: 50px;
         &:hover {
           background: $purple;
+          cursor: pointer;
           color: #fff;
           transform: scale(1.2);
         }
@@ -82,9 +150,9 @@ body {
         background: #f9fafc;
         border-radius: 15px;
         transition: 0.5s ease-in-out;
-        z-index: 30;
 
-        &:hover {
+        &:hover,
+        &.active {
           background: $purple;
           cursor: pointer;
           span {
@@ -100,6 +168,13 @@ body {
           transition: 0.5s ease-in-out;
           color: rgba(114, 114, 114, 0.664);
         }
+
+        .day-card-modal {
+          width: 200px;
+          height: 200px;
+          background: red;
+          z-index: 999;
+        }
       }
     }
   }
@@ -112,5 +187,17 @@ body {
 
   .calendar {
     width: calc(100% - 30px) !important;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(70px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
