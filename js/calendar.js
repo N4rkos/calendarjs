@@ -62,12 +62,6 @@ class Calendar {
                 date: new Date(Date.UTC(2020, 2, 27, 1)),
                 done: false
             },
-            {
-                name: 'Anniversaire de papa',
-                type: 'personal',
-                date: new Date(Date.UTC(2020, 2, 30, 1)),
-                done: false
-            }
         ]
         //Set the control listener
         for (let control of this.controls) control.addEventListener('click', this.handleControl)
