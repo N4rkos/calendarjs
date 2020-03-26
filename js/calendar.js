@@ -37,6 +37,38 @@ class Calendar {
         this.panel = panel
         this.active = null
         this.completeMonth = this.getDaysInMonthUTC()
+        this.markers = [
+            {
+                name: 'Lorem Ipsum',
+                type: 'school',
+                date: new Date(Date.UTC(2020, 2, 27, 1)),
+                done: false
+            },
+            {
+                name: 'Dolor Sit Amet',
+                type: 'personal',
+                date: new Date(Date.UTC(2020, 2, 27, 1)),
+                done: false
+            },
+            {
+                name: 'Lorem Ipsum',
+                type: 'school',
+                date: new Date(Date.UTC(2020, 2, 27, 1)),
+                done: false
+            },
+            {
+                name: 'Dolor Sit Amet',
+                type: 'personal',
+                date: new Date(Date.UTC(2020, 2, 27, 1)),
+                done: false
+            },
+            {
+                name: 'Anniversaire de papa',
+                type: 'personal',
+                date: new Date(Date.UTC(2020, 2, 30, 1)),
+                done: false
+            }
+        ]
         //Set the control listener
         for (let control of this.controls) control.addEventListener('click', this.handleControl)
         //Build the UI
@@ -75,7 +107,7 @@ class Calendar {
      * @param {number|null} length 
      */
     format(str, length) {
-        if(str === undefined) {
+        if (str === undefined) {
             str = this.DAYS[this.DAYS.length - 1]
         }
         return length ? str.substr(0, length) + '.' : str
@@ -175,6 +207,15 @@ class Calendar {
     }
 
     /**
+     * 
+     * @param {Date} d1 
+     * @param {Date} d2 
+     */
+    isSameDay(d1, d2) {
+        return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate()
+    }
+
+    /**
      * Build a day card
      * @param {Date} day the day
      * @param {number} offsetTop the space between top of card and top
@@ -190,15 +231,76 @@ class Calendar {
         dayCard.style.top = offsetTop + '%';
         dayCard.innerHTML = `<span style="color:${today ? "#fff" : "rgba(114, 114, 114, 0.664)"}">${day.getDate()}</span>`
         dayCard.addEventListener('click', this.handleDayClicked)
+        
+        let markerRow = document.createElement('div')
+        markerRow.setAttribute('class', 'marker-row')
+        dayCard.appendChild(this.injectMarkers(day))
         return dayCard
     }
 
+    /**
+     * Inject markers into the day card
+     * @param {Date} day the day 
+     */
+    injectMarkers(day) {
+        const dayMarkers = this.markers.filter(({date}) => this.isSameDay(date, day))
+        let markerRow = document.createElement('div')
+        markerRow.setAttribute('class', 'marker-row')
+        if(dayMarkers.length != 0){
+            //Add markers
+            for(let marker of dayMarkers){
+                let markerPoint = document.createElement('div')
+                markerPoint.setAttribute('class', 'marker')
+                markerPoint.style.left = dayMarkers.indexOf(marker) * 9 + "px"
+                markerRow.appendChild(markerPoint)
+            }
+        }
+        return markerRow
+    }
+
+    /**
+     * Build the day panel which appear on the left
+     */
     buildPanel() {
         //Header
         let header = document.createElement('div')
         header.setAttribute('class', 'panel-header')
         header.innerHTML = `<h1>${this.formatDate(this.currentDate)}</h1>`
         //Content
+        let content = document.createElement('div')
+        content.setAttribute('class', 'panel-content')
+        const events = this.markers.filter(({date}) => this.isSameDay(date, this.currentDate))
+        for(let event of events) {
+            let eventCard = document.createElement('div')
+            eventCard.setAttribute('class', 'event-card')
+
+            //Icon container
+            let iconContainer = document.createElement('div')
+            iconContainer.setAttribute('class', 'icon-container')
+            iconContainer.style.background = '#FA6400'
+
+            //Content
+            let eventContent = document.createElement('div')
+            eventContent.setAttribute('class', 'content')
+
+
+            //Icon
+            let icon = document.createElement('ion-icon')
+            icon.setAttribute('name', 'school-outline')
+            icon.setAttribute('class', 'icon')
+            iconContainer.appendChild(icon)
+
+            //Text
+            let text = document.createElement('p')
+            text.innerText = event.name
+
+            eventContent.appendChild(text)
+
+            //Add
+            eventCard.appendChild(iconContainer)
+            eventCard.appendChild(eventContent)
+            content.appendChild(eventCard)
+        }
 
         //Button
         let button = document.createElement('button')
@@ -207,6 +309,7 @@ class Calendar {
 
 
         this.panel.appendChild(header)
+        this.panel.appendChild(content)
         this.panel.appendChild(button)
     }
 

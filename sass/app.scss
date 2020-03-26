@@ -58,7 +58,7 @@ body {
     border: 2px solid transparent;
 
     &.active {
-      width: calc(30% - 80px) !important;
+      width: calc(35% - 80px) !important;
       border: $borderLight;
       opacity: 1;
     }
@@ -71,6 +71,50 @@ body {
         color: $purple;
         transition: 0.5s ease-in-out;
         animation: fadeIn 1s ease-in-out;
+      }
+    }
+
+    .panel-content {
+      position: absolute;
+      top: 75px;
+      height: calc(100% - 130px);
+      width: calc(100% - 30px);
+      overflow-y: auto;
+
+      .event-card {
+        height: 50px;
+        border-radius: 15px;
+        margin: 10px 0;
+        width: calc(100% - 16px);
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 8px 8px;
+        background: #f9fafc;
+
+        .icon-container {
+          width: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          border-radius: 15px;
+
+          .icon {
+            font-size: 25px;
+          }
+        }
+
+        .content {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          height: 100%;
+          width: calc(100% - 8px);
+        }
+
       }
     }
 
@@ -109,7 +153,7 @@ body {
     transition: 0.5s ease-in-out;
 
     &.active {
-      width: 70%;
+      width: 65%;
     }
 
     .controls {
@@ -175,6 +219,12 @@ body {
           span {
             color: #fff !important;
           }
+
+          .marker-row {
+            .marker {
+              background: white;
+            }
+          }
         }
 
         span {
@@ -186,11 +236,20 @@ body {
           color: rgba(114, 114, 114, 0.664);
         }
 
-        .day-card-modal {
-          width: 200px;
-          height: 200px;
-          background: red;
-          z-index: 999;
+        .marker-row {
+          left: 10px;
+          bottom: 10px;
+          position: absolute;
+          width: calc(100% - 20px);
+          height: 10px;
+          .marker {
+            position: absolute;
+            background: $purple;
+            border-radius: 50px;
+            width: 7px;
+            height: 7px;
+            transition: 0.5s ease-in-out;
+          }
         }
       }
     }
